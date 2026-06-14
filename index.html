@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aapki Business Ki Value — Estimate | Unlisted Axis</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF0EC; --surface:#FBFBF9; --ink:#16241F; --ink-soft:#4A5A52;
+  --line:#D6DAD2; --accent:#16785A; --accent-soft:#E4F0EA; --gold:#A9803B;
+  --shadow:0 10px 40px rgba(22,40,31,.10);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:620px;margin:0 auto;padding:22px 16px 56px}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:500}
+h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(26px,6.5vw,38px);line-height:1.08;font-weight:700;letter-spacing:-.02em;margin:8px 0 10px}
+.lede{font-size:15px;color:var(--ink-soft);max-width:46ch}
+.lede b{color:var(--ink);font-weight:600}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 20px;box-shadow:var(--shadow);margin-top:24px}
+.field{margin-bottom:18px}
+.field:last-child{margin-bottom:0}
+label{display:block;font-size:13px;font-weight:600;margin-bottom:7px;color:var(--ink)}
+label .sub{font-weight:400;color:var(--ink-soft);font-size:12px}
+.inputwrap{position:relative}
+.rupee{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--ink-soft);font-size:15px;font-weight:500}
+input[type=number],select{width:100%;border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:12px 13px;font-size:15px;font-family:'Inter';color:var(--ink);transition:border-color .15s}
+input[type=number]{padding-left:28px;font-variant-numeric:tabular-nums}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%234A5A52' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+input:focus,select:focus{outline:none;border-color:var(--accent)}
+.toggle{display:flex;gap:8px;margin-top:2px}
+.toggle button{flex:1;border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:10px;font-size:13.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;font-family:'Inter';transition:all .15s}
+.toggle button.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.growthrow{display:flex;align-items:center;gap:12px}
+.growthrow input[type=range]{flex:1;accent-color:var(--accent)}
+.growthval{font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:14px;min-width:54px;text-align:right;color:var(--ink)}
+.calc{width:100%;margin-top:22px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:15px;font-family:'Space Grotesk';font-size:16px;font-weight:600;cursor:pointer;letter-spacing:.01em;transition:background .15s,transform .08s}
+.calc:hover{background:#0F6147}.calc:active{transform:scale(.99)}
+.note{font-size:12px;color:var(--ink-soft);margin-top:12px;line-height:1.5}
+/* result */
+.result{margin-top:24px;display:none}
+.result.show{display:block;animation:fade .4s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.result.show{animation:none}}
+.rcard{background:var(--ink);color:#F3F5F2;border-radius:14px;padding:26px 22px;text-align:center;box-shadow:var(--shadow)}
+.rcard .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#9FB3AA}
+.range{font-family:'Space Grotesk',sans-serif;font-size:clamp(28px,8vw,46px);font-weight:700;letter-spacing:-.02em;margin:10px 0 4px;line-height:1.05}
+.range .dash{color:var(--gold);font-weight:500;padding:0 4px}
+.rcard .mid{font-size:13px;color:#9FB3AA;margin-top:4px}
+.methods{margin-top:16px;display:grid;grid-template-columns:1fr;gap:10px}
+.method{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:14px 15px}
+.method h4{font-size:12px;font-family:'IBM Plex Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:5px;font-weight:500}
+.method p{font-size:14px;color:var(--ink);font-variant-numeric:tabular-nums}
+.method span{color:var(--ink-soft);font-size:12.5px}
+.insight{background:var(--accent-soft);border:1px solid #C9E2D6;border-radius:11px;padding:15px 16px;margin-top:12px;font-size:14px;line-height:1.6;color:#143F30}
+.insight .ih{font-weight:600;display:block;margin-bottom:4px;color:var(--accent)}
+.insight.loading{color:var(--ink-soft);font-style:italic}
+.levers{margin-top:12px;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:15px 16px}
+.levers h4{font-size:13px;font-weight:600;margin-bottom:8px}
+.levers li{font-size:13.5px;color:var(--ink-soft);margin:0 0 6px 18px;line-height:1.5}
+.bridge{margin-top:16px;text-align:center;font-size:13.5px;color:var(--ink-soft);line-height:1.6}
+.bridge a{color:var(--accent);font-weight:600;text-decoration:none;border-bottom:1px solid var(--accent)}
+footer{margin-top:26px;padding-top:16px;border-top:1px solid var(--line);font-size:11.5px;color:var(--ink-soft);line-height:1.55}
+.brandtag{display:flex;align-items:center;gap:7px;margin-top:18px;font-size:12px;color:var(--ink-soft)}
+.brandtag b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="eyebrow">Unlisted Axis · Free founder tool</span>
+  <h1>Aapki business ki value kitni hai?</h1>
+  <p class="lede">Char cheezein bhariye, ek <b>honest estimate range</b> paaiye — 2 minute mein. Yeh ek starting point hai, formal valuation nahi.</p>
+
+  <div class="card">
+    <div class="field">
+      <label>Saalana revenue <span class="sub">(pichle 12 mahine)</span></label>
+      <div class="inputwrap"><span class="rupee">₹</span><input type="number" id="rev" placeholder="50,00,000" min="0"></div>
+    </div>
+
+    <div class="field">
+      <label>Business profitable hai?</label>
+      <div class="toggle">
+        <button type="button" id="pf-yes" class="on" onclick="setProfit(true)">Haan, profit ho raha hai</button>
+        <button type="button" id="pf-no" onclick="setProfit(false)">Abhi nahi</button>
+      </div>
+    </div>
+
+    <div class="field" id="profitField">
+      <label>Saalana net profit <span class="sub">(approx)</span></label>
+      <div class="inputwrap"><span class="rupee">₹</span><input type="number" id="profit" placeholder="6,00,000" min="0"></div>
+    </div>
+
+    <div class="field">
+      <label>Growth — revenue pichle saal se kitna badha? <span class="sub" id="growthHint"></span></label>
+      <div class="growthrow">
+        <input type="range" id="growth" min="-20" max="200" value="30" oninput="updGrowth()">
+        <span class="growthval" id="growthVal">30%</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Sector</label>
+      <select id="sector">
+        <option value="saas">SaaS / Software</option>
+        <option value="tech">Tech-enabled / Marketplace / App</option>
+        <option value="d2c">D2C / Consumer brand</option>
+        <option value="services" selected>Services / Agency / Consulting</option>
+        <option value="manufacturing">Manufacturing</option>
+        <option value="retail">Retail / Trading / Distribution</option>
+        <option value="healthcare">Healthcare / Pharma</option>
+        <option value="other">Koi aur</option>
+      </select>
+    </div>
+
+    <button class="calc" onclick="calculate()">Value estimate dekhiye →</button>
+    <p class="note">Yeh tool sirf aapke diye numbers se ek rough range nikalta hai — apni taraf se kuch nahi maanta.</p>
+  </div>
+
+  <div class="result" id="result">
+    <div class="rcard">
+      <div class="lbl">Estimated business value</div>
+      <div class="range" id="rangeOut">—</div>
+      <div class="mid" id="midOut"></div>
+    </div>
+    <div class="methods" id="methodsOut"></div>
+    <div class="insight loading" id="insightOut"></div>
+    <div class="levers" id="leversOut"></div>
+    <div class="bridge" id="bridgeOut"></div>
+  </div>
+
+  <div class="brandtag">🔒 <span>Aapke numbers <b>aapke device pe hi</b> rehte hain — kahin save ya upload nahi hote.</span></div>
+
+  <footer>
+    <b>Disclaimer:</b> Yeh ek educational estimate hai, formal valuation ya investment advice nahi. Asli valuation ke liye gehri due-diligence, audited financials aur ek qualified valuer/CA zaroori hai. Yeh numbers aapke diye gaye inputs aur general industry multiples par based hain — actual value isse kaafi alag ho sakti hai. Unlisted Axis SEBI-registered Investment Adviser nahi hai.
+  </footer>
+</div>
+
+<script>
+const SECTORS = {
+  saas:{name:'SaaS / Software', rl:4, rh:8, pl:16, ph:30},
+  tech:{name:'Tech-enabled / Marketplace', rl:2, rh:5, pl:12, ph:25},
+  d2c:{name:'D2C / Consumer brand', rl:1.5, rh:4, pl:10, ph:20},
+  services:{name:'Services / Agency', rl:0.8, rh:2, pl:4, ph:9},
+  manufacturing:{name:'Manufacturing', rl:1, rh:2.5, pl:5, ph:11},
+  retail:{name:'Retail / Trading', rl:0.5, rh:1.5, pl:5, ph:10},
+  healthcare:{name:'Healthcare / Pharma', rl:2, rh:5, pl:12, ph:22},
+  other:{name:'General business', rl:1, rh:3, pl:6, ph:13},
+};
+let profitable = true;
+
+function setProfit(v){
+  profitable = v;
+  document.getElementById('pf-yes').classList.toggle('on', v);
+  document.getElementById('pf-no').classList.toggle('on', !v);
+  document.getElementById('profitField').style.display = v ? 'block' : 'none';
+}
+function updGrowth(){
+  const g = +document.getElementById('growth').value;
+  document.getElementById('growthVal').textContent = g + '%';
+  const hint = g >= 100 ? '(hyper-growth)' : g >= 40 ? '(strong)' : g >= 15 ? '(healthy)' : g >= 0 ? '(steady)' : '(declining)';
+  document.getElementById('growthHint').textContent = hint;
+}
+updGrowth();
+
+function growthFactor(g){
+  if(g >= 100) return 1.25;
+  if(g >= 50) return 1.12;
+  if(g >= 25) return 1.0;
+  if(g >= 10) return 0.9;
+  if(g >= 0) return 0.8;
+  return 0.65;
+}
+function fmt(v){
+  if(v >= 1e7) return '₹' + (v/1e7).toFixed(v/1e7 >= 10 ? 0 : 2).replace(/\.?0+$/,'') + ' Cr';
+  if(v >= 1e5) return '₹' + (v/1e5).toFixed(v/1e5 >= 10 ? 0 : 1).replace(/\.?0+$/,'') + ' L';
+  return '₹' + Math.round(v).toLocaleString('en-IN');
+}
+
+function calculate(){
+  const rev = +document.getElementById('rev').value;
+  const profit = +document.getElementById('profit').value;
+  const g = +document.getElementById('growth').value;
+  const s = SECTORS[document.getElementById('sector').value];
+  if(!rev || rev <= 0){ alert('Pehle saalana revenue bhariye 🙂'); return; }
+  const gf = growthFactor(g);
+
+  // Revenue method
+  const revLow = rev * s.rl * gf;
+  const revHigh = rev * s.rh * gf;
+
+  let finalLow, finalHigh, methods = [];
+  methods.push({h:'Revenue method', body: fmt(revLow)+' – '+fmt(revHigh), sub:`${s.rl}–${s.rh}× revenue, growth ke hisaab se adjust`});
+
+  if(profitable && profit > 0){
+    const pLow = profit * s.pl * Math.min(gf,1.15);
+    const pHigh = profit * s.ph * Math.min(gf,1.15);
+    methods.push({h:'Profit method', body: fmt(pLow)+' – '+fmt(pHigh), sub:`${s.pl}–${s.ph}× net profit`});
+    finalLow = (revLow + pLow)/2;
+    finalHigh = (revHigh + pHigh)/2;
+  } else {
+    finalLow = revLow * 0.85;
+    finalHigh = revHigh;
+  }
+  const mid = (finalLow + finalHigh)/2;
+
+  // render
+  document.getElementById('rangeOut').innerHTML = fmt(finalLow) + '<span class="dash">–</span>' + fmt(finalHigh);
+  document.getElementById('midOut').textContent = 'Most likely aaspaas: ' + fmt(mid);
+  document.getElementById('methodsOut').innerHTML = methods.map(m =>
+    `<div class="method"><h4>${m.h}</h4><p>${m.body}</p><span>${m.sub}</span></div>`).join('');
+
+  // levers (deterministic, respectful)
+  const levers = [];
+  if(g < 25) levers.push('Growth tej karna — sabse bada lever. Same revenue, double growth, valuation kaafi upar.');
+  if(profitable && profit > 0){ const m = profit/rev; if(m < 0.12) levers.push('Margin sudhaarna — abhi ~'+Math.round(m*100)+'% hai; har extra % profit multiple ko fayda deta hai.'); }
+  if(!profitable) levers.push('Profitability ki taraf raasta dikhana — investors loss-making business ko discount karte hain.');
+  levers.push('Recurring / repeat revenue badhana — predictable income hamesha premium multiple kheenchta hai.');
+  if(['retail','services'].includes(document.getElementById('sector').value)) levers.push('Customer concentration ghatana — ek bade client par dependency value ghata deti hai.');
+  document.getElementById('leversOut').innerHTML = '<h4>Value badhane ke levers</h4><ul>' +
+    levers.slice(0,3).map(l=>`<li>${l}</li>`).join('') + '</ul>';
+
+  document.getElementById('bridgeOut').innerHTML =
+    'Apni business ko <b>investible</b> banana hai — funding ya exit ke liye taiyaar?<br><a href="https://unlistedaxis.com" target="_blank" rel="noopener">unlistedaxis.com</a> — leave it to us.';
+
+  document.getElementById('result').classList.add('show');
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'start'});
+
+  showInsight({rev, profit, g, profitable, low:finalLow, high:finalHigh});
+}
+
+function showInsight(d){
+  const el = document.getElementById('insightOut');
+  el.classList.remove('loading');
+  const margin = (d.profitable && d.rev > 0) ? d.profit / d.rev : null;
+  let second;
+  if(!d.profitable){
+    second = 'Abhi profitability nahi hai, isliye buyers thoda discount karte hain — break-even ki taraf ek clear raasta value ko sabse zyada upar le jaayega.';
+  } else if(d.g >= 50){
+    second = 'Aapki strong growth ('+d.g+'%) is range ko upar le ja rahi hai — buyers growth ke liye premium dete hain. Ise sustain kiya, toh value tezi se badhegi.';
+  } else if(d.g < 15){
+    second = 'Growth abhi steady hai — yahi sabse bada lever hai. Same business, thodi tej growth, aur yeh range kaafi upar shift ho jaati hai.';
+  } else if(margin !== null && margin < 0.1){
+    second = 'Profit ho raha hai par margin abhi patla (~'+Math.round(margin*100)+'%) — har extra margin point valuation ko seedha fayda deta hai.';
+  } else {
+    second = 'Numbers healthy dikhte hain — ab consistency aur predictable revenue isi range ko upar le ja sakti hai.';
+  }
+  el.innerHTML = '<span class="ih">Aapke numbers ka matlab</span>Is range ka matlab — agar aaj aap apni company ka stake value karein, toh woh roughly yahin aata hai. ' + second;
+}
+function esc(s){const d=document.createElement('div');d.textContent=String(s);return d.innerHTML;}
+</script>
+</body>
+</html>
